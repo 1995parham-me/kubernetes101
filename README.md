@@ -263,14 +263,17 @@ Colocation Datacenter
 ### Long-Term Support
 
 **Ubuntu 24.04 LTS Support:**
+
 - Standard support until April 2029 (5 years)
 - Extended Security Maintenance (ESM) until 2034 (paid)
 
 **Kubernetes Support:**
+
 - Latest 3 minor versions supported (~1 year rolling support)
 - Recommended: Upgrade to new minor version every 6-12 months
 
 **PostgreSQL Support:**
+
 - Each major version supported for 5 years
 - PostgreSQL 16: Supported until September 2028
 
@@ -461,15 +464,3 @@ kubectl logs -n calico-system <calico-pod>
    - Optimize database queries
    - Fine-tune resource requests/limits
    - Implement caching (Redis, Memcached)
-
----
-
-## License
-
-This documentation is provided as-is for educational and deployment purposes.
-
-## Author
-
-Created for production Kubernetes deployment on HP Gen11 servers with PostgreSQL HA.
-
-Last updated: 2025-10-26
