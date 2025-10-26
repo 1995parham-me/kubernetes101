@@ -14,16 +14,19 @@
 ## Resource Requirements
 
 ### Per Worker Node
+
 - **CPU**: 16 cores
 - **RAM**: 64 GB
 - **Disk**: Minimum 200 GB (recommend 500 GB for app data + PostgreSQL)
 
 ### Master Node (Control Plane)
+
 - **CPU**: 4-8 cores
 - **RAM**: 8-16 GB
 - **Disk**: 100 GB
 
 ### Total Requirements
+
 - **CPU**: 120 cores (7 workers × 16 + 1 master × 8)
 - **RAM**: 464 GB (7 workers × 64 + 1 master × 16)
 - **Disk**: ~3 TB
@@ -86,23 +89,27 @@ Bare Metal Server 3 (32 vCPUs, 128 GB):
 ```
 
 **HA Benefits**:
+
 - Each PostgreSQL worker on different physical host (3-way replication)
 - Application workers spread across all 3 hosts
 - Can tolerate 1 bare metal server failure
 - PostgreSQL remains available with 2/3 replicas if 1 server down
 
 **Constraints**:
+
 - Bare Metal 2 needs more resources (48 cores) - consider 2-socket server
 - Anti-affinity rules ensure PostgreSQL replicas never co-locate on same physical host
 
 ## Hypervisor Choice
 
 ### Option A: VMware ESXi + vCenter (PAID)
+
 - **Cost**: ~$995/CPU for Standard, ~$3495/CPU for Enterprise Plus
 - **Pros**: Industry standard, mature, excellent management
 - **Cons**: Expensive, requires licensing
 
 ### Option B: VMware ESXi Free
+
 - **Cost**: Free
 - **Pros**: Reliable, VMware quality
 - **Cons**:
@@ -115,6 +122,7 @@ Bare Metal Server 3 (32 vCPUs, 128 GB):
 ⚠️ **ESXi Free WILL NOT WORK** - 8 vCPU limit prevents 16-core workers
 
 ### Option C: Proxmox VE (FREE & RECOMMENDED)
+
 - **Cost**: Free (open source)
 - **Pros**:
   - Supports clustering (like vCenter)
@@ -129,6 +137,7 @@ Bare Metal Server 3 (32 vCPUs, 128 GB):
   - Paid support optional
 
 ### Option D: Harvester (FREE, Kubernetes-native)
+
 - **Cost**: Free (SUSE open source)
 - **Pros**:
   - Built on Kubernetes (K3s)
@@ -141,6 +150,7 @@ Bare Metal Server 3 (32 vCPUs, 128 GB):
 ## Recommendation
 
 **Use Proxmox VE** for your use case because:
+
 1. Free and feature-complete
 2. Supports clustering across 3 nodes
 3. No vCPU limitations
