@@ -68,13 +68,21 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
    - Complete Kubernetes cluster setup with kubeadm
    - Container runtime (containerd) configuration
    - CNI plugin (Calico) installation
-   - Local storage provisioner setup
+   - Basic local storage setup
    - Node labeling and resource management
    - Backup and disaster recovery
 
+6. **[08-storage-topolvm-setup.md](08-storage-topolvm-setup.md)**
+   - TopoLVM installation (production-grade storage)
+   - LVM volume group configuration on each node
+   - Storage classes for applications and databases
+   - Volume snapshots for backups
+   - Capacity-aware scheduling
+   - Migration from basic storage provisioner
+
 ### Phase 4: Database Layer
 
-6. **[06-postgresql-cnpg-setup.md](06-postgresql-cnpg-setup.md)**
+7. **[06-postgresql-cnpg-setup.md](06-postgresql-cnpg-setup.md)**
    - CloudNativePG operator installation
    - PostgreSQL HA cluster deployment (3 replicas)
    - Node affinity and anti-affinity rules
@@ -85,7 +93,7 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
 
 ### Phase 5: Maintenance & Upgrades
 
-7. **[07-upgrade-strategy.md](07-upgrade-strategy.md)**
+8. **[07-upgrade-strategy.md](07-upgrade-strategy.md)**
    - Comprehensive upgrade strategy for all components
    - Ubuntu 24.04 LTS upgrade path (support until 2029)
    - Kubernetes version upgrades (patch and minor)
@@ -126,15 +134,24 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
 - Follow [05-kubernetes-installation.md](05-kubernetes-installation.md)
 - Create 8 VMs from template
 - Initialize Kubernetes cluster with kubeadm
-- Install Calico CNI and local storage provisioner
+- Install Calico CNI
 - Label nodes (application vs database)
+
+### 4.5 Setup Storage (TopoLVM)
+
+- Follow [08-storage-topolvm-setup.md](08-storage-topolvm-setup.md)
+- Configure LVM on all worker nodes
+- Install TopoLVM CSI driver
+- Create storage classes
+- Enable volume snapshots
 
 ### 5. Deploy PostgreSQL
 
 - Follow [06-postgresql-cnpg-setup.md](06-postgresql-cnpg-setup.md)
 - Install CloudNativePG operator
-- Deploy 3-replica PostgreSQL cluster
+- Deploy 3-replica PostgreSQL cluster (using TopoLVM storage)
 - Configure backups and monitoring
+- Set up volume snapshots for instant backups
 
 ### 6. Deploy Your Applications
 
@@ -217,7 +234,7 @@ Colocation Datacenter
 - **Kubernetes**: v1.30.x (latest stable)
 - **Container Runtime**: containerd
 - **CNI**: Calico v3.28
-- **Storage**: local-path-provisioner
+- **Storage**: TopoLVM (LVM-based CSI with snapshots)
 - **Ingress**: Nginx Ingress Controller (or Traefik)
 
 ### Database Layer
