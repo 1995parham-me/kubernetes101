@@ -83,6 +83,20 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
    - Monitoring with Prometheus/Grafana
    - Performance tuning for PHP workloads
 
+### Phase 5: Maintenance & Upgrades
+
+7. **[07-upgrade-strategy.md](07-upgrade-strategy.md)**
+   - Comprehensive upgrade strategy for all components
+   - Ubuntu 24.04 LTS upgrade path (support until 2029)
+   - Kubernetes version upgrades (patch and minor)
+   - PostgreSQL major/minor version upgrades with CNPG
+   - Proxmox VE hypervisor updates
+   - Application deployment strategies (rolling, blue-green, canary)
+   - Backup procedures before upgrades
+   - Rollback and disaster recovery
+   - Quarterly maintenance schedule template
+   - Automation with Ansible
+
 ---
 
 ## Quick Start
@@ -128,6 +142,14 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
 - Use PgBouncer for database connections
 - Configure ingress controller (Nginx/Traefik)
 - Set up CI/CD pipeline
+
+### 7. Establish Upgrade Strategy
+
+- Review [07-upgrade-strategy.md](07-upgrade-strategy.md)
+- Set up quarterly maintenance schedule
+- Configure automated backups (etcd, PostgreSQL, VM snapshots)
+- Test rollback procedures
+- Document cluster-specific configurations
 
 ---
 
@@ -187,7 +209,7 @@ Colocation Datacenter
 
 - **Bare Metal**: HP ProLiant DL380 Gen11
 - **Hypervisor**: Proxmox VE 8.x (or VMware ESXi 8.0)
-- **OS**: Ubuntu 22.04 LTS
+- **OS**: Ubuntu 24.04 LTS (Noble Numbat)
 - **Storage**: Local NVMe SSDs with LVM
 
 ### Kubernetes Layer
@@ -237,6 +259,20 @@ Colocation Datacenter
 
 **Annual TCO**: ~$42,000 - $58,000 (first year with hardware)
 **Subsequent years**: ~$6,000 - $11,000/year (colo only)
+
+### Long-Term Support
+
+**Ubuntu 24.04 LTS Support:**
+- Standard support until April 2029 (5 years)
+- Extended Security Maintenance (ESM) until 2034 (paid)
+
+**Kubernetes Support:**
+- Latest 3 minor versions supported (~1 year rolling support)
+- Recommended: Upgrade to new minor version every 6-12 months
+
+**PostgreSQL Support:**
+- Each major version supported for 5 years
+- PostgreSQL 16: Supported until September 2028
 
 ---
 

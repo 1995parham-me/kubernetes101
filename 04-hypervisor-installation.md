@@ -504,7 +504,7 @@ Repeat for second NVMe drive (`nvme-datastore-02`).
 
 After hypervisor installation, create a VM template for Kubernetes nodes.
 
-### Proxmox: Ubuntu 22.04 LTS Template
+### Proxmox: Ubuntu 24.04 LTS Template
 
 ```bash
 # SSH to Proxmox host
@@ -512,13 +512,13 @@ ssh root@10.10.20.11
 
 # Download Ubuntu cloud image
 cd /var/lib/vz/template/iso
-wget https://cloud-images.ubuntu.com/releases/22.04/release/ubuntu-22.04-server-cloudimg-amd64.img
+wget https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img
 
 # Create VM (ID 9000 = template convention)
-qm create 9000 --name ubuntu-22.04-template --memory 4096 --cores 2 --net0 virtio,bridge=vmbr0,tag=30
+qm create 9000 --name ubuntu-24.04-template --memory 4096 --cores 2 --net0 virtio,bridge=vmbr0,tag=30
 
 # Import cloud image as disk
-qm importdisk 9000 ubuntu-22.04-server-cloudimg-amd64.img nvme-local-01
+qm importdisk 9000 ubuntu-24.04-server-cloudimg-amd64.img nvme-local-01
 qm set 9000 --scsihw virtio-scsi-pci --scsi0 nvme-local-01:vm-9000-disk-0
 
 # Add cloud-init drive
@@ -556,12 +556,12 @@ qm set 101 --ipconfig0 ip=10.10.30.10/24,gw=10.10.30.1
 qm start 101
 ```
 
-### ESXi: Ubuntu 22.04 LTS Template
+### ESXi: Ubuntu 24.04 LTS Template
 
 1. **Download Ubuntu Server ISO**: https://ubuntu.com/download/server
 2. **Upload to ESXi**: Datastore browser → Upload
 3. **Create VM**:
-   - Name: `ubuntu-22.04-template`
+   - Name: `ubuntu-24.04-template`
    - Guest OS: Ubuntu Linux (64-bit)
    - CPU: 2 cores
    - RAM: 4 GB

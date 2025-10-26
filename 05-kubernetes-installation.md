@@ -32,7 +32,8 @@ From Proxmox/ESXi, you should have created 8 VMs:
 
 ### OS Requirements
 
-- **Ubuntu 22.04 LTS** (or Rocky Linux 9, CentOS Stream 9)
+- **Ubuntu 24.04 LTS** (Noble Numbat) - recommended for 5-year support until 2029
+- Alternative: Ubuntu 22.04 LTS, Rocky Linux 9, or Debian 12
 - **2 GB+ RAM** per node (we have plenty)
 - **2+ CPUs** per node (we have plenty)
 - **Full network connectivity** between all nodes
