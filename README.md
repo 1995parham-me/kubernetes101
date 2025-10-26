@@ -67,12 +67,19 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
 5. **[05-kubernetes-installation.md](05-kubernetes-installation.md)**
    - Complete Kubernetes cluster setup with kubeadm
    - Container runtime (containerd) configuration
-   - CNI plugin (Calico) installation
-   - Basic local storage setup
+   - Basic cluster initialization
    - Node labeling and resource management
    - Backup and disaster recovery
 
-6. **[08-storage-topolvm-setup.md](08-storage-topolvm-setup.md)**
+6. **[09-cilium-networking.md](09-cilium-networking.md)**
+   - Cilium CNI installation (eBPF-based networking)
+   - Hubble observability setup (network flow visualization)
+   - kube-proxy replacement for better performance
+   - Network policies for PostgreSQL access control
+   - WireGuard encryption for database traffic
+   - Performance tuning for low-latency connections
+
+7. **[08-storage-topolvm-setup.md](08-storage-topolvm-setup.md)**
    - TopoLVM installation (production-grade storage)
    - LVM volume group configuration on each node
    - Storage classes for applications and databases
@@ -80,9 +87,17 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
    - Capacity-aware scheduling
    - Migration from basic storage provisioner
 
+8. **[10-contour-ingress.md](10-contour-ingress.md)**
+   - Contour ingress controller installation
+   - HTTPProxy configuration (type-safe routing)
+   - TLS automation with cert-manager
+   - Advanced routing (path, header, weighted)
+   - Canary and blue-green deployments
+   - Rate limiting and protection
+
 ### Phase 4: Database Layer
 
-7. **[06-postgresql-cnpg-setup.md](06-postgresql-cnpg-setup.md)**
+9. **[06-postgresql-cnpg-setup.md](06-postgresql-cnpg-setup.md)**
    - CloudNativePG operator installation
    - PostgreSQL HA cluster deployment (3 replicas)
    - Node affinity and anti-affinity rules
@@ -93,7 +108,7 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
 
 ### Phase 5: Maintenance & Upgrades
 
-8. **[07-upgrade-strategy.md](07-upgrade-strategy.md)**
+10. **[07-upgrade-strategy.md](07-upgrade-strategy.md)**
    - Comprehensive upgrade strategy for all components
    - Ubuntu 24.04 LTS upgrade path (support until 2029)
    - Kubernetes version upgrades (patch and minor)
@@ -133,17 +148,33 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
 
 - Follow [05-kubernetes-installation.md](05-kubernetes-installation.md)
 - Create 8 VMs from template
-- Initialize Kubernetes cluster with kubeadm
-- Install Calico CNI
+- Initialize Kubernetes cluster with kubeadm (without CNI initially)
 - Label nodes (application vs database)
 
-### 4.5 Setup Storage (TopoLVM)
+### 4.5 Setup Networking (Cilium)
+
+- Follow [09-cilium-networking.md](09-cilium-networking.md)
+- Install Cilium CNI with eBPF
+- Replace kube-proxy for better performance
+- Enable Hubble observability
+- Configure network policies
+- Enable WireGuard encryption
+
+### 4.6 Setup Storage (TopoLVM)
 
 - Follow [08-storage-topolvm-setup.md](08-storage-topolvm-setup.md)
 - Configure LVM on all worker nodes
 - Install TopoLVM CSI driver
 - Create storage classes
 - Enable volume snapshots
+
+### 4.7 Setup Ingress (Contour)
+
+- Follow [10-contour-ingress.md](10-contour-ingress.md)
+- Install Contour with Envoy
+- Configure MetalLB for LoadBalancer IPs (or use NodePort)
+- Set up cert-manager for TLS
+- Create HTTPProxy for applications
 
 ### 5. Deploy PostgreSQL
 
@@ -157,8 +188,9 @@ Complete guide for deploying a production-ready Kubernetes cluster on HP ProLian
 
 - Create Kubernetes deployments for PHP apps
 - Use PgBouncer for database connections
-- Configure ingress controller (Nginx/Traefik)
+- Configure HTTPProxy for routing and TLS
 - Set up CI/CD pipeline
+- Implement canary or blue-green deployments
 
 ### 7. Establish Upgrade Strategy
 
@@ -220,6 +252,22 @@ Colocation Datacenter
 
 ---
 
+## Why This Stack? (vs Traditional Alternatives)
+
+| Component | Traditional Choice | **Our Choice** | Key Benefit |
+|-----------|-------------------|----------------|-------------|
+| **CNI** | Calico (iptables) | **Cilium** (eBPF) | 40% lower latency, built-in observability |
+| **Storage** | local-path | **TopoLVM** (LVM) | Volume snapshots, capacity tracking |
+| **Ingress** | Nginx | **Contour** (Envoy) | Zero-downtime updates, type-safe config |
+| **Hypervisor** | ESXi Free | **Proxmox VE** | No vCPU limits, free clustering |
+| **Database HA** | Patroni | **CNPG** | Kubernetes-native, simpler setup |
+
+**Result**: Modern stack with better performance, observability, and $21K+/year savings vs commercial alternatives.
+
+See [TECHNOLOGY-DECISIONS.md](TECHNOLOGY-DECISIONS.md) for detailed comparison.
+
+---
+
 ## Technology Stack
 
 ### Infrastructure Layer
@@ -233,9 +281,9 @@ Colocation Datacenter
 
 - **Kubernetes**: v1.30.x (latest stable)
 - **Container Runtime**: containerd
-- **CNI**: Calico v3.28
+- **CNI**: Cilium (eBPF-based with Hubble observability)
 - **Storage**: TopoLVM (LVM-based CSI with snapshots)
-- **Ingress**: Nginx Ingress Controller (or Traefik)
+- **Ingress**: Contour (Envoy-based with HTTPProxy CRD)
 
 ### Database Layer
 
